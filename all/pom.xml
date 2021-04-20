@@ -34,6 +34,14 @@
     <skipJapicmp>true</skipJapicmp>
   </properties>
 
+  <distributionManagement>
+    <snapshotRepository>
+      <id>adguard-snapshots</id>
+      <name>adguard-snapshots</name>
+      <url>https://art.adtidy.org/artifactory/adguard</url>
+    </snapshotRepository>
+  </distributionManagement>
+
   <dependencyManagement>
     <dependencies>
       <dependency>

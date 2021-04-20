@@ -1,0 +1,48 @@
+---
+version: 2
+plan:
+  project-key: ADGJAVA
+  key: NETTYSPECS
+  name: netty
+variables:
+  dockerMaven: maven:3.6.3-openjdk-14-slim
+
+stages:
+  - Deploy:
+      manual: 'false'
+      final: 'false'
+      jobs:
+        - Deploy
+
+Deploy:
+  docker:
+    image: ${bamboo.dockerMaven}
+    volumes:
+      ${system.MAVEN_DIR}: ${bamboo.cacheMaven}
+  key: DEPLOY
+  other:
+      clean-working-dir: true
+  tasks:
+    - checkout:
+        force-clean-build: 'true'
+    - maven:
+        executable: maven
+        jdk: JDK 14
+        goal: clean install -DskipTests=true
+    - maven:
+        executable: maven
+        jdk: JDK 14
+        goal: clean deploy -f all/pom.xml
+  requirements:
+    - adg-docker: 'true'
+
+branches:
+  create: 'manually'
+  delete:
+    after-deleted-days: '1'
+    after-inactive-days: '5'
+  link-to-jira: 'false'
+
+labels: []
+other:
+  concurrent-build-plugin: system-default
